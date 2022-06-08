@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 2.8)
 project(Libcbdetect)
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin/${CMAKE_BUILD_TYPE})
-set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE})
-set(CMAKE_LIBRARY_PATH ${PROJECT_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE})
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE})
+set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE})
+set(CMAKE_LIBRARY_PATH ${CMAKE_BINARY_DIR}/lib/${CMAKE_BUILD_TYPE})
 
 if (UNIX)
   set(CMAKE_CXX_COMPILER g++)
@@ -28,7 +28,9 @@ else ()
   set(LIB_TYPE STATIC)
 endif ()
 
-find_package(OpenCV REQUIRED)
+#find_package(OpenCV REQUIRED)
+include_directories(~/deps/OpenCV-3.4.14/include)
+include(~/deps/OpenCV-3.4.14/share/OpenCV/OpenCVConfig.cmake)
 
 set(THIRD_PARTY_INCLUDE_DIRS ${OpenCV_INCLUDE_DIRS})
 set(THIRD_PARTY_LIBS ${OpenCV_LIBS})
