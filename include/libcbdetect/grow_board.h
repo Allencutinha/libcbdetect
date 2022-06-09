@@ -45,9 +45,9 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 namespace cbdetect {
 
 enum GrowType {
-  GrowType_Failure = 0,
-  GrowType_Inside,
-  GrowType_Boundary,
+    GrowType_Failure = 0,
+    GrowType_Inside,
+    GrowType_Boundary,
 };
 
 LIBCBDETECT_DLL_DECL GrowType grow_board(const Corner &corners,

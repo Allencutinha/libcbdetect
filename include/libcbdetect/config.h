@@ -46,20 +46,20 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 #include <functional>
 namespace cv {
 class ParallelLoopBodyLambdaWrapper : public ParallelLoopBody {
-private:
-  std::function<void(const Range &)> m_functor;
+  private:
+    std::function<void(const Range &)> m_functor;
 
-public:
-  ParallelLoopBodyLambdaWrapper(std::function<void(const Range &)> functor)
-      : m_functor(functor) {}
+  public:
+    ParallelLoopBodyLambdaWrapper(std::function<void(const Range &)> functor)
+        : m_functor(functor) {}
 
-  virtual void operator()(const cv::Range &range) const { m_functor(range); }
+    virtual void operator()(const cv::Range &range) const { m_functor(range); }
 };
 
 inline void parallel_for_(const Range &range,
                           std::function<void(const Range &)> functor,
                           double nstripes = -1.) {
-  parallel_for_(range, ParallelLoopBodyLambdaWrapper(functor), nstripes);
+    parallel_for_(range, ParallelLoopBodyLambdaWrapper(functor), nstripes);
 }
 } // namespace cv
 #endif
@@ -83,63 +83,63 @@ inline void parallel_for_(const Range &range,
 namespace cbdetect {
 
 enum DetectMethod {
-  // origin method fast mode
-  TemplateMatchFast = 0,
-  // origin method slow mode
-  TemplateMatchSlow,
+    // origin method fast mode
+    TemplateMatchFast = 0,
+    // origin method slow mode
+    TemplateMatchSlow,
 
-  // compute hessian of image, detect by a threshold
-  // form https://github.com/facebookincubator/deltille
-  HessianResponse,
+    // compute hessian of image, detect by a threshold
+    // form https://github.com/facebookincubator/deltille
+    HessianResponse,
 
-  // paper: Accurate Detection and Localization of Checkerboard Corners for
-  // Calibration
-  LocalizedRadonTransform
+    // paper: Accurate Detection and Localization of Checkerboard Corners for
+    // Calibration
+    LocalizedRadonTransform
 };
 
 enum CornerType { SaddlePoint = 0, MonkeySaddlePoint };
 
 typedef struct Params {
-  bool show_processing;
-  bool show_debug_image;
-  bool show_grow_processing;
-  bool norm;
-  bool polynomial_fit;
-  int norm_half_kernel_size;
-  int polynomial_fit_half_kernel_size;
-  double init_loc_thr;
-  double score_thr;
-  bool strict_grow;
-  bool overlay;
-  bool occlusion;
-  DetectMethod detect_method;
-  CornerType corner_type;
-  std::vector<int> radius;
+    bool show_processing;
+    bool show_debug_image;
+    bool show_grow_processing;
+    bool norm;
+    bool polynomial_fit;
+    int norm_half_kernel_size;
+    int polynomial_fit_half_kernel_size;
+    double init_loc_thr;
+    double score_thr;
+    bool strict_grow;
+    bool overlay;
+    bool occlusion;
+    DetectMethod detect_method;
+    CornerType corner_type;
+    std::vector<int> radius;
 
-  Params()
-      : show_processing(true), show_debug_image(false),
-        show_grow_processing(false), norm(false), polynomial_fit(true),
-        norm_half_kernel_size(31), polynomial_fit_half_kernel_size(4),
-        init_loc_thr(0.01), score_thr(0.01), strict_grow(true), overlay(false),
-        occlusion(true), detect_method(HessianResponse),
-        corner_type(SaddlePoint), radius({5, 7}) {}
+    Params()
+        : show_processing(true), show_debug_image(false),
+          show_grow_processing(false), norm(false), polynomial_fit(true),
+          norm_half_kernel_size(31), polynomial_fit_half_kernel_size(4),
+          init_loc_thr(0.01), score_thr(0.01), strict_grow(true),
+          overlay(false), occlusion(true), detect_method(HessianResponse),
+          corner_type(SaddlePoint), radius({5, 7}) {}
 } Params;
 
 typedef struct Corner {
-  std::vector<cv::Point2d> p;
-  std::vector<int> r;
-  std::vector<cv::Point2d> v1;
-  std::vector<cv::Point2d> v2;
-  std::vector<cv::Point2d> v3;
-  std::vector<double> score;
+    std::vector<cv::Point2d> p;
+    std::vector<int> r;
+    std::vector<cv::Point2d> v1;
+    std::vector<cv::Point2d> v2;
+    std::vector<cv::Point2d> v3;
+    std::vector<double> score;
 } Corner;
 
 typedef struct Board {
-  std::vector<std::vector<int>> idx;
-  std::vector<std::vector<std::vector<double>>> energy;
-  int num;
+    std::vector<std::vector<int>> idx;
+    std::vector<std::vector<std::vector<double>>> energy;
+    int num;
 
-  Board() : num(0) {}
+    Board() : num(0) {}
 } Board;
 
 } // namespace cbdetect
