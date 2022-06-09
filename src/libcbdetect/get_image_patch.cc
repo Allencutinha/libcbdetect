@@ -21,8 +21,7 @@
 
 namespace cbdetect {
 
-void get_image_patch(const cv::Mat &img, double u, double v, int r,
-                     cv::Mat &img_sub) {
+void get_image_patch(const cv::Mat &img, double u, double v, int r, cv::Mat &img_sub) {
     int iu = u;
     int iv = v;
     double du = u - iu;
@@ -35,17 +34,16 @@ void get_image_patch(const cv::Mat &img, double u, double v, int r,
     img_sub.create(2 * r + 1, 2 * r + 1, CV_64F);
     for (int j = -r; j <= r; ++j) {
         for (int i = -r; i <= r; ++i) {
-            img_sub.at<double>(j + r, i + r) =
-                a00 * img.at<double>(iv + j, iu + i) +
-                a01 * img.at<double>(iv + j, iu + i + 1) +
-                a10 * img.at<double>(iv + j + 1, iu + i) +
-                a11 * img.at<double>(iv + j + 1, iu + i + 1);
+            img_sub.at<double>(j + r, i + r) = a00 * img.at<double>(iv + j, iu + i) +
+                                               a01 * img.at<double>(iv + j, iu + i + 1) +
+                                               a10 * img.at<double>(iv + j + 1, iu + i) +
+                                               a11 * img.at<double>(iv + j + 1, iu + i + 1);
         }
     }
 }
 
-void get_image_patch_with_mask(const cv::Mat &img, const cv::Mat &mask,
-                               double u, double v, int r, cv::Mat &img_sub) {
+void get_image_patch_with_mask(const cv::Mat &img, const cv::Mat &mask, double u, double v, int r,
+                               cv::Mat &img_sub) {
     int iu = u;
     int iv = v;
     double du = u - iu;
@@ -60,11 +58,10 @@ void get_image_patch_with_mask(const cv::Mat &img, const cv::Mat &mask,
     for (int j = -r; j <= r; ++j) {
         for (int i = -r; i <= r; ++i) {
             if (mask.at<double>(j + r, i + r) >= 1e-6) {
-                img_sub.at<double>(num, 0) =
-                    a00 * img.at<double>(iv + j, iu + i) +
-                    a01 * img.at<double>(iv + j, iu + i + 1) +
-                    a10 * img.at<double>(iv + j + 1, iu + i) +
-                    a11 * img.at<double>(iv + j + 1, iu + i + 1);
+                img_sub.at<double>(num, 0) = a00 * img.at<double>(iv + j, iu + i) +
+                                             a01 * img.at<double>(iv + j, iu + i + 1) +
+                                             a10 * img.at<double>(iv + j + 1, iu + i) +
+                                             a11 * img.at<double>(iv + j + 1, iu + i + 1);
                 ++num;
             }
         }

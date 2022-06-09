@@ -27,10 +27,9 @@
 
 namespace cbdetect {
 
-LIBCBDETECT_DLL_DECL void filter_board(const Corner &corners,
-                                       std::vector<int> &used, Board &board,
-                                       std::vector<cv::Point2i> &proposal,
-                                       double &energy, const Params &params);
+LIBCBDETECT_DLL_DECL void filter_board(const Corner &corners, std::vector<int> &used, Board &board,
+                                       std::vector<cv::Point2i> &proposal, double &energy,
+                                       const Params &params);
 
 }
 

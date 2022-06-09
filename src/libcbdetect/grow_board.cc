@@ -48,10 +48,8 @@ namespace cbdetect {
 // pred = 2*p3-p2;
 //
 // replica prediction (new)
-std::vector<cv::Point2d> predict_corners(const Corner &corners,
-                                         const std::vector<int> &p1,
-                                         const std::vector<int> &p2,
-                                         const std::vector<int> &p3) {
+std::vector<cv::Point2d> predict_corners(const Corner &corners, const std::vector<int> &p1,
+                                         const std::vector<int> &p2, const std::vector<int> &p3) {
     std::vector<cv::Point2d> pred(p3.size());
     if (p1.empty()) {
         for (int i = 0; i < pred.size(); ++i) {
@@ -82,17 +80,14 @@ std::vector<cv::Point2d> predict_corners(const Corner &corners,
     return pred;
 }
 
-std::vector<int> predict_board_corners(const Corner &corners,
-                                       std::vector<int> &used,
-                                       std::vector<int> &p1,
-                                       std::vector<int> &p2,
+std::vector<int> predict_board_corners(const Corner &corners, std::vector<int> &used,
+                                       std::vector<int> &p1, std::vector<int> &p2,
                                        std::vector<int> &p3) {
     std::vector<cv::Point2d> pred = predict_corners(corners, p1, p2, p3);
     std::vector<int> pred_idx(pred.size(), -2);
 
     // build distance matrix
-    std::vector<std::vector<double>> D(
-        pred.size(), std::vector<double>(corners.p.size(), DBL_MAX));
+    std::vector<std::vector<double>> D(pred.size(), std::vector<double>(corners.p.size(), DBL_MAX));
     for (int i = 0; i < pred.size(); ++i) {
         cv::Point2d w = pred[i] - corners.p[p3[i]];
         //    double angle_w = std::atan2(w.y, w.x);
@@ -120,8 +115,7 @@ std::vector<int> predict_board_corners(const Corner &corners,
         int min_row = 0;
         int min_col = 0;
         for (int j = 0; j < pred.size(); ++j) {
-            int min_row_2 =
-                std::min_element(D[j].begin(), D[j].end()) - D[j].begin();
+            int min_row_2 = std::min_element(D[j].begin(), D[j].end()) - D[j].begin();
             if (D[j][min_row_2] < min_D) {
                 min_D = D[j][min_row_2];
                 min_row = min_row_2;
@@ -162,8 +156,7 @@ bool add_board_boundary(Board &board, int direction) {
         }
         if (add_board) {
             std::vector<int> idx(cols, -1);
-            std::vector<std::vector<double>> energy(
-                cols, std::vector<double>(3, DBL_MAX));
+            std::vector<std::vector<double>> energy(cols, std::vector<double>(3, DBL_MAX));
             board.idx.insert(board.idx.begin(), idx);
             board.energy.insert(board.energy.begin(), energy);
         }
@@ -179,8 +172,7 @@ bool add_board_boundary(Board &board, int direction) {
         if (add_board) {
             for (int i = 0; i < rows; ++i) {
                 board.idx[i].insert(board.idx[i].begin(), -1);
-                board.energy[i].insert(board.energy[i].begin(),
-                                       std::vector<double>(3, DBL_MAX));
+                board.energy[i].insert(board.energy[i].begin(), std::vector<double>(3, DBL_MAX));
             }
         }
         break;
@@ -194,8 +186,7 @@ bool add_board_boundary(Board &board, int direction) {
         }
         if (add_board) {
             std::vector<int> idx(cols, -1);
-            std::vector<std::vector<double>> energy(
-                cols, std::vector<double>(3, DBL_MAX));
+            std::vector<std::vector<double>> energy(cols, std::vector<double>(3, DBL_MAX));
             board.idx.emplace_back(idx);
             board.energy.emplace_back(energy);
         }
@@ -224,8 +215,7 @@ bool add_board_boundary(Board &board, int direction) {
 }
 
 GrowType grow_board(const Corner &corners, std::vector<int> &used, Board &board,
-                    std::vector<cv::Point2i> &proposal, int direction,
-                    const Params &params) {
+                    std::vector<cv::Point2i> &proposal, int direction, const Params &params) {
     // return immediately, if there do not exist any chessboards
     if (board.idx.empty()) {
         return GrowType_Failure;

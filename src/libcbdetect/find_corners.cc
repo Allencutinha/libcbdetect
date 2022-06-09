@@ -39,8 +39,7 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-void find_corners_reiszed(const cv::Mat &img, Corner &corners,
-                          const Params &params) {
+void find_corners_reiszed(const cv::Mat &img, Corner &corners, const Params &params) {
     cv::Mat img_resized, img_norm;
     Corner corners_resized;
 
@@ -53,8 +52,8 @@ void find_corners_reiszed(const cv::Mat &img, Corner &corners,
     } else {
         return;
     }
-    cv::resize(img, img_resized, cv::Size(img.cols * scale, img.rows * scale),
-               0, 0, cv::INTER_LINEAR);
+    cv::resize(img, img_resized, cv::Size(img.cols * scale, img.rows * scale), 0, 0,
+               cv::INTER_LINEAR);
 
     if (img_resized.channels() == 3) {
 #if CV_VERSION_MAJOR >= 4
@@ -69,8 +68,7 @@ void find_corners_reiszed(const cv::Mat &img, Corner &corners,
 
     // normalize image and calculate gradients
     cv::Mat img_du, img_dv, img_angle, img_weight;
-    image_normalization_and_gradients(img_norm, img_du, img_dv, img_angle,
-                                      img_weight, params);
+    image_normalization_and_gradients(img_norm, img_du, img_dv, img_angle, img_weight, params);
     if (params.show_debug_image && params.norm) {
         cv::Mat img_show;
         img_norm.convertTo(img_show, CV_8U, 255, 0);
@@ -84,8 +82,8 @@ void find_corners_reiszed(const cv::Mat &img, Corner &corners,
         return;
     }
     if (params.show_processing) {
-        printf("Initializing conres (%d x %d) ... %lu\n", img_norm.cols,
-               img_norm.rows, corners_resized.p.size());
+        printf("Initializing conres (%d x %d) ... %lu\n", img_norm.cols, img_norm.rows,
+               corners_resized.p.size());
     }
     if (params.show_debug_image) {
         plot_corners(img_resized, corners_resized.p, "init location resized");
@@ -94,19 +92,18 @@ void find_corners_reiszed(const cv::Mat &img, Corner &corners,
     // pre-filter corners according to zero crossings
     filter_corners(img_norm, img_angle, img_weight, corners_resized, params);
     if (params.show_processing) {
-        printf("Filtering corners (%d x %d) ... %lu\n", img_norm.cols,
-               img_norm.rows, corners_resized.p.size());
+        printf("Filtering corners (%d x %d) ... %lu\n", img_norm.cols, img_norm.rows,
+               corners_resized.p.size());
     }
     if (params.show_debug_image) {
         plot_corners(img_resized, corners_resized.p, "filter corners resized");
     }
 
     // refinement
-    refine_corners(img_du, img_dv, img_angle, img_weight, corners_resized,
-                   params);
+    refine_corners(img_du, img_dv, img_angle, img_weight, corners_resized, params);
     if (params.show_processing) {
-        printf("Refining corners (%d x %d) ... %lu\n", img_norm.cols,
-               img_norm.rows, corners_resized.p.size());
+        printf("Refining corners (%d x %d) ... %lu\n", img_norm.cols, img_norm.rows,
+               corners_resized.p.size());
     }
     if (params.show_debug_image) {
         plot_corners(img_resized, corners_resized.p, "refine corners resized");
@@ -162,8 +159,7 @@ void find_corners(const cv::Mat &img, Corner &corners, const Params &params) {
 
     // normalize image and calculate gradients
     cv::Mat img_du, img_dv, img_angle, img_weight;
-    image_normalization_and_gradients(img_norm, img_du, img_dv, img_angle,
-                                      img_weight, params);
+    image_normalization_and_gradients(img_norm, img_du, img_dv, img_angle, img_weight, params);
     if (params.show_debug_image && params.norm) {
         cv::Mat img_show;
         img_norm.convertTo(img_show, CV_8U, 255., 0);
@@ -177,8 +173,8 @@ void find_corners(const cv::Mat &img, Corner &corners, const Params &params) {
         return;
     }
     if (params.show_processing) {
-        printf("Initializing conres (%d x %d) ... %lu\n", img_norm.cols,
-               img_norm.rows, corners.p.size());
+        printf("Initializing conres (%d x %d) ... %lu\n", img_norm.cols, img_norm.rows,
+               corners.p.size());
     }
     if (params.show_debug_image) {
         plot_corners(img, corners.p, "init location");
@@ -187,8 +183,8 @@ void find_corners(const cv::Mat &img, Corner &corners, const Params &params) {
     // pre-filter corners according to zero crossings
     filter_corners(img_norm, img_angle, img_weight, corners, params);
     if (params.show_processing) {
-        printf("Filtering corners (%d x %d) ... %lu\n", img_norm.cols,
-               img_norm.rows, corners.p.size());
+        printf("Filtering corners (%d x %d) ... %lu\n", img_norm.cols, img_norm.rows,
+               corners.p.size());
     }
     if (params.show_debug_image) {
         plot_corners(img, corners.p, "filter corners");
@@ -197,8 +193,8 @@ void find_corners(const cv::Mat &img, Corner &corners, const Params &params) {
     // refinement
     refine_corners(img_du, img_dv, img_angle, img_weight, corners, params);
     if (params.show_processing) {
-        printf("Refining corners (%d x %d) ... %lu\n", img_norm.cols,
-               img_norm.rows, corners.p.size());
+        printf("Refining corners (%d x %d) ... %lu\n", img_norm.cols, img_norm.rows,
+               corners.p.size());
     }
     if (params.show_debug_image) {
         plot_corners(img, corners.p, "refine corners");
@@ -207,8 +203,7 @@ void find_corners(const cv::Mat &img, Corner &corners, const Params &params) {
     // resize image to detect more corners
     find_corners_reiszed(img, corners, params);
     if (params.show_processing) {
-        printf("Merging corners (%d x %d) ... %lu\n", img.cols, img.rows,
-               corners.p.size());
+        printf("Merging corners (%d x %d) ... %lu\n", img.cols, img.rows, corners.p.size());
     }
     if (params.show_debug_image) {
         plot_corners(img, corners.p, "merge corners");
@@ -218,8 +213,8 @@ void find_corners(const cv::Mat &img, Corner &corners, const Params &params) {
     if (params.polynomial_fit) {
         polynomial_fit(img_norm, corners, params);
         if (params.show_processing) {
-            printf("Polyfitting corners (%d x %d) ... %lu\n", img_norm.cols,
-                   img_norm.rows, corners.p.size());
+            printf("Polyfitting corners (%d x %d) ... %lu\n", img_norm.cols, img_norm.rows,
+                   corners.p.size());
         }
         if (params.show_debug_image) {
             plot_corners(img, corners.p, "polynomial fit corners");
@@ -235,8 +230,8 @@ void find_corners(const cv::Mat &img, Corner &corners, const Params &params) {
     // non maximum suppression
     non_maximum_suppression_sparse(corners, 3, img.size(), params);
     if (params.show_processing) {
-        printf("Scoring corners (%d x %d) ... %lu\n", img_norm.cols,
-               img_norm.rows, corners.p.size());
+        printf("Scoring corners (%d x %d) ... %lu\n", img_norm.cols, img_norm.rows,
+               corners.p.size());
     }
     if (params.show_debug_image) {
         plot_corners(img, corners.p, "scoring corners");

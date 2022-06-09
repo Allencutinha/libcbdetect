@@ -51,8 +51,7 @@ std::unordered_map<int, cv::Mat> weight_mask(const std::vector<int> &radius) {
         cv::Mat &mat = mask[r];
         for (int v = 0; v < r * 2 + 1; ++v) {
             for (int u = 0; u < r * 2 + 1; ++u) {
-                double dist =
-                    std::sqrt((u - r) * (u - r) + (v - r) * (v - r)) / r;
+                double dist = std::sqrt((u - r) * (u - r) + (v - r) * (v - r)) / r;
                 dist = std::min(std::max(dist, 0.7), 1.3);
                 mat.at<double>(v, u) = (1.3 - dist) / 0.6;
             }

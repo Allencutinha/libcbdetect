@@ -44,8 +44,7 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-LIBCBDETECT_DLL_DECL bool init_board(const Corner &corners,
-                                     std::vector<int> &used, Board &board,
+LIBCBDETECT_DLL_DECL bool init_board(const Corner &corners, std::vector<int> &used, Board &board,
                                      int idx);
 
 }

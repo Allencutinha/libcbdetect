@@ -27,8 +27,7 @@
 namespace cbdetect {
 
 LIBCBDETECT_DLL_DECL void plot_boards(const cv::Mat &img, const Corner &corners,
-                                      const std::vector<Board> &boards,
-                                      const Params &params);
+                                      const std::vector<Board> &boards, const Params &params);
 
 }
 

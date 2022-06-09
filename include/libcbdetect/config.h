@@ -56,8 +56,7 @@ class ParallelLoopBodyLambdaWrapper : public ParallelLoopBody {
     virtual void operator()(const cv::Range &range) const { m_functor(range); }
 };
 
-inline void parallel_for_(const Range &range,
-                          std::function<void(const Range &)> functor,
+inline void parallel_for_(const Range &range, std::function<void(const Range &)> functor,
                           double nstripes = -1.) {
     parallel_for_(range, ParallelLoopBodyLambdaWrapper(functor), nstripes);
 }
@@ -117,12 +116,10 @@ typedef struct Params {
     std::vector<int> radius;
 
     Params()
-        : show_processing(true), show_debug_image(false),
-          show_grow_processing(false), norm(false), polynomial_fit(true),
-          norm_half_kernel_size(31), polynomial_fit_half_kernel_size(4),
-          init_loc_thr(0.01), score_thr(0.01), strict_grow(true),
-          overlay(false), occlusion(true), detect_method(HessianResponse),
-          corner_type(SaddlePoint), radius({5, 7}) {}
+        : show_processing(true), show_debug_image(false), show_grow_processing(false), norm(false),
+          polynomial_fit(true), norm_half_kernel_size(31), polynomial_fit_half_kernel_size(4),
+          init_loc_thr(0.01), score_thr(0.01), strict_grow(true), overlay(false), occlusion(true),
+          detect_method(HessianResponse), corner_type(SaddlePoint), radius({5, 7}) {}
 } Params;
 
 typedef struct Corner {

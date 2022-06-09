@@ -43,49 +43,44 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-void non_maximum_suppression(const cv::Mat &img, int n, double tau, int margin,
-                             Corner &corners) {
+void non_maximum_suppression(const cv::Mat &img, int n, double tau, int margin, Corner &corners) {
     cv::Mat choose_img = cv::Mat::zeros(img.size(), CV_8U);
-    cv::parallel_for_(
-        cv::Range(1, std::floor((img.rows - 2 * margin) / (n + 1)) + 1),
-        [&](const cv::Range &range) -> void {
-            for (int j = range.start * (n + 1) + margin - 1;
-                 j < range.end * (n + 1) + margin - 1; j += n + 1) {
-                for (int i = n + margin; i < img.cols - n - margin;
-                     i += n + 1) {
-                    int maxi = i, maxj = j;
-                    double maxval = img.at<double>(j, i);
+    cv::parallel_for_(cv::Range(1, std::floor((img.rows - 2 * margin) / (n + 1)) + 1),
+                      [&](const cv::Range &range) -> void {
+                          for (int j = range.start * (n + 1) + margin - 1;
+                               j < range.end * (n + 1) + margin - 1; j += n + 1) {
+                              for (int i = n + margin; i < img.cols - n - margin; i += n + 1) {
+                                  int maxi = i, maxj = j;
+                                  double maxval = img.at<double>(j, i);
 
-                    for (int j2 = j; j2 <= j + n; ++j2) {
-                        for (int i2 = i; i2 <= i + n; ++i2) {
-                            if (img.at<double>(j2, i2) > maxval) {
-                                maxi = i2;
-                                maxj = j2;
-                                maxval = img.at<double>(j2, i2);
-                            }
-                        }
-                    }
+                                  for (int j2 = j; j2 <= j + n; ++j2) {
+                                      for (int i2 = i; i2 <= i + n; ++i2) {
+                                          if (img.at<double>(j2, i2) > maxval) {
+                                              maxi = i2;
+                                              maxj = j2;
+                                              maxval = img.at<double>(j2, i2);
+                                          }
+                                      }
+                                  }
 
-                    // maximum
-                    for (int j2 = maxj - n;
-                         j2 <= std::min(maxj + n, img.rows - 1 - margin);
-                         ++j2) {
-                        for (int i2 = maxi - n;
-                             i2 <= std::min(maxi + n, img.cols - 1 - margin);
-                             ++i2) {
-                            if (img.at<double>(j2, i2) > maxval) {
-                                goto GOTO_FAILED;
-                            }
-                        }
-                    }
+                                  // maximum
+                                  for (int j2 = maxj - n;
+                                       j2 <= std::min(maxj + n, img.rows - 1 - margin); ++j2) {
+                                      for (int i2 = maxi - n;
+                                           i2 <= std::min(maxi + n, img.cols - 1 - margin); ++i2) {
+                                          if (img.at<double>(j2, i2) > maxval) {
+                                              goto GOTO_FAILED;
+                                          }
+                                      }
+                                  }
 
-                    if (maxval > tau) {
-                        choose_img.at<uint8_t>(maxj, maxi) = 1;
-                    }
-                GOTO_FAILED:;
-                }
-            }
-        });
+                                  if (maxval > tau) {
+                                      choose_img.at<uint8_t>(maxj, maxi) = 1;
+                                  }
+                              GOTO_FAILED:;
+                              }
+                          }
+                      });
 
     for (int j = margin; j < img.rows - margin; ++j) {
         for (int i = margin; i < img.cols - margin; ++i) {
@@ -109,8 +104,7 @@ void non_maximum_suppression_sparse(Corner &corners, int n, cv::Size img_size,
             used.at<int>(v, u) = i;
         }
     }
-    std::vector<cv::Point2d> corners_out_p, corners_out_v1, corners_out_v2,
-        corners_out_v3;
+    std::vector<cv::Point2d> corners_out_p, corners_out_v1, corners_out_v2, corners_out_v3;
     std::vector<double> corners_out_score;
     std::vector<int> corners_out_r;
     bool is_monkey_saddle = params.corner_type == MonkeySaddlePoint;
@@ -123,12 +117,10 @@ void non_maximum_suppression_sparse(Corner &corners, int n, cv::Size img_size,
         }
         for (int j2 = v - n; j2 <= v + n; ++j2) {
             for (int i2 = u - n; i2 <= u + n; ++i2) {
-                if (j2 < 0 || j2 >= img_size.height || i2 < 0 ||
-                    i2 >= img_size.height) {
+                if (j2 < 0 || j2 >= img_size.height || i2 < 0 || i2 >= img_size.height) {
                     continue;
                 }
-                if (img_score.at<double>(j2, i2) > score &&
-                    (i2 != u || j2 != v)) {
+                if (img_score.at<double>(j2, i2) > score && (i2 != u || j2 != v)) {
                     goto GOTO_FAILED;
                 }
             }

@@ -42,8 +42,7 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-cv::Point3i board_energy(const Corner &corners, Board &board,
-                         const Params &params) {
+cv::Point3i board_energy(const Corner &corners, Board &board, const Params &params) {
     // energy: number of corners
     double E_corners = -1.0 * board.num;
 
@@ -61,8 +60,7 @@ cv::Point3i board_energy(const Corner &corners, Board &board,
                 const cv::Point2d &x1 = corners.p[idx1];
                 const cv::Point2d &x2 = corners.p[idx2];
                 const cv::Point2d &x3 = corners.p[idx3];
-                double E_structure =
-                    cv::norm(x1 + x3 - 2 * x2) / cv::norm(x1 - x3);
+                double E_structure = cv::norm(x1 + x3 - 2 * x2) / cv::norm(x1 - x3);
                 board.energy[i][j][0] = E_corners * (1 - E_structure);
                 if (E_structure > max_E_structure) {
                     max_E_structure = E_structure;
@@ -85,8 +83,7 @@ cv::Point3i board_energy(const Corner &corners, Board &board,
                     const cv::Point2d &x1 = corners.p[idx1];
                     const cv::Point2d &x2 = corners.p[idx2];
                     const cv::Point2d &x3 = corners.p[idx3];
-                    double E_structure =
-                        cv::norm(x1 + x3 - 2 * x2) / cv::norm(x1 - x3);
+                    double E_structure = cv::norm(x1 + x3 - 2 * x2) / cv::norm(x1 - x3);
                     board.energy[i][j][1] = E_corners * (1 - E_structure);
                     if (E_structure > max_E_structure) {
                         max_E_structure = E_structure;
@@ -109,8 +106,7 @@ cv::Point3i board_energy(const Corner &corners, Board &board,
                 const cv::Point2d &x1 = corners.p[idx1];
                 const cv::Point2d &x2 = corners.p[idx2];
                 const cv::Point2d &x3 = corners.p[idx3];
-                double E_structure =
-                    cv::norm(x1 + x3 - 2 * x2) / cv::norm(x1 - x3);
+                double E_structure = cv::norm(x1 + x3 - 2 * x2) / cv::norm(x1 - x3);
                 board.energy[i][j][2] = E_corners * (1 - E_structure);
                 if (E_structure > max_E_structure) {
                     max_E_structure = E_structure;

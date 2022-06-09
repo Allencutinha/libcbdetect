@@ -48,9 +48,8 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-void get_init_location(const cv::Mat &img, const cv::Mat &img_du,
-                       const cv::Mat &img_dv, Corner &corners,
-                       const Params &parmas);
+void get_init_location(const cv::Mat &img, const cv::Mat &img_du, const cv::Mat &img_dv,
+                       Corner &corners, const Params &parmas);
 
 }
 

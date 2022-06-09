@@ -51,10 +51,8 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-void debug_grow_process(const cv::Mat &img, const Corner &corners,
-                        const Board &board,
-                        const std::vector<cv::Point2i> &proposal, int direction,
-                        bool type) {
+void debug_grow_process(const cv::Mat &img, const Corner &corners, const Board &board,
+                        const std::vector<cv::Point2i> &proposal, int direction, bool type) {
     cv::Mat img_show;
     if (img.channels() != 3) {
 #if CV_VERSION_MAJOR >= 4
@@ -72,32 +70,28 @@ void debug_grow_process(const cv::Mat &img, const Corner &corners,
             if (board.idx[i][j] < 0) {
                 continue;
             }
-            cv::circle(img_show, corners.p[board.idx[i][j]], 4,
-                       cv::Scalar(255, 0, 0), -1);
-            cv::putText(img_show, std::to_string(board.idx[i][j]),
-                        cv::Point2i(corners.p[board.idx[i][j]].x - 12,
-                                    corners.p[board.idx[i][j]].y - 6),
-                        cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255),
-                        1);
+            cv::circle(img_show, corners.p[board.idx[i][j]], 4, cv::Scalar(255, 0, 0), -1);
+            cv::putText(
+                img_show, std::to_string(board.idx[i][j]),
+                cv::Point2i(corners.p[board.idx[i][j]].x - 12, corners.p[board.idx[i][j]].y - 6),
+                cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 1);
             mean += corners.p[board.idx[i][j]];
         }
     }
     mean /= (double)(board.num);
     mean.x -= 10;
     mean.y += 10;
-    cv::putText(img_show, std::to_string(direction), mean,
-                cv::FONT_HERSHEY_SIMPLEX, 1.3, cv::Scalar(196, 196, 0), 2);
+    cv::putText(img_show, std::to_string(direction), mean, cv::FONT_HERSHEY_SIMPLEX, 1.3,
+                cv::Scalar(196, 196, 0), 2);
 
     for (const auto &i : proposal) {
         if (board.idx[i.y][i.x] < 0) {
             continue;
         }
         if (type) {
-            cv::circle(img_show, corners.p[board.idx[i.y][i.x]], 4,
-                       cv::Scalar(0, 255, 0), -1);
+            cv::circle(img_show, corners.p[board.idx[i.y][i.x]], 4, cv::Scalar(0, 255, 0), -1);
         } else {
-            cv::circle(img_show, corners.p[board.idx[i.y][i.x]], 4,
-                       cv::Scalar(0, 0, 255), -1);
+            cv::circle(img_show, corners.p[board.idx[i.y][i.x]], 4, cv::Scalar(0, 0, 255), -1);
         }
     }
 
@@ -105,8 +99,8 @@ void debug_grow_process(const cv::Mat &img, const Corner &corners,
     cv::waitKey();
 }
 
-void boards_from_corners(const cv::Mat &img, const Corner &corners,
-                         std::vector<Board> &boards, const Params &params) {
+void boards_from_corners(const cv::Mat &img, const Corner &corners, std::vector<Board> &boards,
+                         const Params &params) {
     // intialize boards
     boards.clear();
     Board board;
@@ -146,11 +140,9 @@ void boards_from_corners(const cv::Mat &img, const Corner &corners,
         while (1) {
             int num_corners = board.num;
 
-            for (int j = 0;
-                 j < (params.corner_type == MonkeySaddlePoint ? 6 : 4); ++j) {
+            for (int j = 0; j < (params.corner_type == MonkeySaddlePoint ? 6 : 4); ++j) {
                 std::vector<cv::Point2i> proposal;
-                GrowType grow_type =
-                    grow_board(corners, used, board, proposal, j, params);
+                GrowType grow_type = grow_board(corners, used, board, proposal, j, params);
                 if (grow_type == GrowType_Failure) {
                     continue;
                 }
@@ -203,14 +195,11 @@ void boards_from_corners(const cv::Mat &img, const Corner &corners,
                 for (int k2 = 0; k2 < board.idx[0].size(); ++k2) {
                     for (int l1 = 0; l1 < boards[j].idx.size(); ++l1) {
                         for (int l2 = 0; l2 < boards[j].idx[0].size(); ++l2) {
-                            if (board.idx[k1][k2] != -1 &&
-                                board.idx[k1][k2] != -2 &&
+                            if (board.idx[k1][k2] != -1 && board.idx[k1][k2] != -2 &&
                                 board.idx[k1][k2] == boards[j].idx[l1][l2]) {
-                                cv::Point3i maxE_pos_tmp =
-                                    board_energy(corners, boards[j], params);
+                                cv::Point3i maxE_pos_tmp = board_energy(corners, boards[j], params);
                                 overlap.emplace_back(std::make_pair(
-                                    j, boards[j].energy[maxE_pos_tmp.y]
-                                                       [maxE_pos_tmp.x]
+                                    j, boards[j].energy[maxE_pos_tmp.y][maxE_pos_tmp.x]
                                                        [maxE_pos_tmp.z]));
                                 goto GOTO_BREAK;
                             }

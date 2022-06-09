@@ -41,8 +41,8 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-void create_correlation_patch(std::vector<cv::Mat> &template_kernel,
-                              double angle_1, double angle_2, int radius) {
+void create_correlation_patch(std::vector<cv::Mat> &template_kernel, double angle_1, double angle_2,
+                              int radius) {
     // width and height
     int width = radius * 2 + 1;
     int height = radius * 2 + 1;
@@ -105,9 +105,8 @@ void create_correlation_patch(std::vector<cv::Mat> &template_kernel,
     }
 }
 
-void create_correlation_patch(std::vector<cv::Mat> &template_kernel,
-                              double angle_1, double angle_2, double angle_3,
-                              int radius) {
+void create_correlation_patch(std::vector<cv::Mat> &template_kernel, double angle_1, double angle_2,
+                              double angle_3, int radius) {
     // width and height
     int width = radius * 2 + 1;
     int height = radius * 2 + 1;

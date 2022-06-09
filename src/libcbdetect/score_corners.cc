@@ -55,10 +55,8 @@ double corner_correlation_score(const cv::Mat &img, const cv::Mat &img_weight,
     for (int u = 0; u < img.cols; ++u) {
         for (int v = 0; v < img.rows; ++v) {
             cv::Point2d p1{u - center, v - center};
-            cv::Point2d p2{(p1.x * v1.x + p1.y * v1.y) * v1.x,
-                           (p1.x * v1.x + p1.y * v1.y) * v1.y};
-            cv::Point2d p3{(p1.x * v2.x + p1.y * v2.y) * v2.x,
-                           (p1.x * v2.x + p1.y * v2.y) * v2.y};
+            cv::Point2d p2{(p1.x * v1.x + p1.y * v1.y) * v1.x, (p1.x * v1.x + p1.y * v1.y) * v1.y};
+            cv::Point2d p3{(p1.x * v2.x + p1.y * v2.y) * v2.x, (p1.x * v2.x + p1.y * v2.y) * v2.y};
             if (cv::norm(p1 - p2) <= 1.5 || cv::norm(p1 - p3) <= 1.5) {
                 img_filter.at<double>(v, u) = 1;
             }
@@ -78,8 +76,8 @@ double corner_correlation_score(const cv::Mat &img, const cv::Mat &img_weight,
 
     // create intensity filter kernel
     std::vector<cv::Mat> template_kernel(4); // a1, a2, b1, b2
-    create_correlation_patch(template_kernel, std::atan2(v1.y, v1.x),
-                             std::atan2(v2.y, v2.x), (img.cols - 1) / 2);
+    create_correlation_patch(template_kernel, std::atan2(v1.y, v1.x), std::atan2(v2.y, v2.x),
+                             (img.cols - 1) / 2);
 
     // checkerboard responses
     double a1 = cv::sum(img.mul(template_kernel[0]))[0];
@@ -112,14 +110,10 @@ double corner_correlation_score(const cv::Mat &img, const cv::Mat &img_weight,
     for (int u = 0; u < img.cols; ++u) {
         for (int v = 0; v < img.rows; ++v) {
             cv::Point2d p1{u - center, v - center};
-            cv::Point2d p2{(p1.x * v1.x + p1.y * v1.y) * v1.x,
-                           (p1.x * v1.x + p1.y * v1.y) * v1.y};
-            cv::Point2d p3{(p1.x * v2.x + p1.y * v2.y) * v2.x,
-                           (p1.x * v2.x + p1.y * v2.y) * v2.y};
-            cv::Point2d p4{(p1.x * v3.x + p1.y * v3.y) * v3.x,
-                           (p1.x * v3.x + p1.y * v3.y) * v3.y};
-            if (cv::norm(p1 - p2) <= 1.5 || cv::norm(p1 - p3) <= 1.5 ||
-                cv::norm(p1 - p4) <= 1.5) {
+            cv::Point2d p2{(p1.x * v1.x + p1.y * v1.y) * v1.x, (p1.x * v1.x + p1.y * v1.y) * v1.y};
+            cv::Point2d p3{(p1.x * v2.x + p1.y * v2.y) * v2.x, (p1.x * v2.x + p1.y * v2.y) * v2.y};
+            cv::Point2d p4{(p1.x * v3.x + p1.y * v3.y) * v3.x, (p1.x * v3.x + p1.y * v3.y) * v3.y};
+            if (cv::norm(p1 - p2) <= 1.5 || cv::norm(p1 - p3) <= 1.5 || cv::norm(p1 - p4) <= 1.5) {
                 img_filter.at<double>(v, u) = 1;
             }
         }
@@ -138,9 +132,8 @@ double corner_correlation_score(const cv::Mat &img, const cv::Mat &img_weight,
 
     // create intensity filter kernel
     std::vector<cv::Mat> template_kernel(6); // a1, a2, a3, b1, b2, b3
-    create_correlation_patch(template_kernel, std::atan2(v1.y, v1.x),
-                             std::atan2(v2.y, v2.x), std::atan2(v3.y, v3.x),
-                             (img.cols - 1) / 2);
+    create_correlation_patch(template_kernel, std::atan2(v1.y, v1.x), std::atan2(v2.y, v2.x),
+                             std::atan2(v3.y, v3.x), (img.cols - 1) / 2);
 
     // checkerboard responses
     double a1 = cv::sum(img.mul(template_kernel[0]))[0];
@@ -168,46 +161,41 @@ double corner_correlation_score(const cv::Mat &img, const cv::Mat &img_weight,
     return score_gradient * score_intensity;
 }
 
-void sorce_corners(const cv::Mat &img, const cv::Mat &img_weight,
-                   Corner &corners, const Params &params) {
+void sorce_corners(const cv::Mat &img, const cv::Mat &img_weight, Corner &corners,
+                   const Params &params) {
     corners.score.resize(corners.p.size());
     int width = img.cols, height = img.rows;
     auto mask = weight_mask(params.radius);
 
     // for all corners do
-    cv::parallel_for_(
-        cv::Range(0, corners.p.size()), [&](const cv::Range &range) -> void {
-            for (int i = range.start; i < range.end; ++i) {
-                // corner location
-                double u = corners.p[i].x;
-                double v = corners.p[i].y;
-                int r = corners.r[i];
+    cv::parallel_for_(cv::Range(0, corners.p.size()), [&](const cv::Range &range) -> void {
+        for (int i = range.start; i < range.end; ++i) {
+            // corner location
+            double u = corners.p[i].x;
+            double v = corners.p[i].y;
+            int r = corners.r[i];
 
-                if (u - r < 0 || u + r >= width - 1 || v - r < 0 ||
-                    v + r >= height - 1) {
-                    corners.score[i] = 0.;
-                    continue;
-                }
-                cv::Mat img_sub, img_weight_sub;
-                get_image_patch(img, u, v, r, img_sub);
-                get_image_patch(img_weight, u, v, r, img_weight_sub);
-                img_weight_sub = img_weight_sub.mul(mask[r]);
-                if (params.corner_type == SaddlePoint) {
-                    corners.score[i] = corner_correlation_score(
-                        img_sub, img_weight_sub, corners.v1[i], corners.v2[i]);
-                } else if (params.corner_type == MonkeySaddlePoint) {
-                    corners.score[i] = corner_correlation_score(
-                        img_sub, img_weight_sub, corners.v1[i], corners.v2[i],
-                        corners.v3[i]);
-                }
+            if (u - r < 0 || u + r >= width - 1 || v - r < 0 || v + r >= height - 1) {
+                corners.score[i] = 0.;
+                continue;
             }
-        });
+            cv::Mat img_sub, img_weight_sub;
+            get_image_patch(img, u, v, r, img_sub);
+            get_image_patch(img_weight, u, v, r, img_weight_sub);
+            img_weight_sub = img_weight_sub.mul(mask[r]);
+            if (params.corner_type == SaddlePoint) {
+                corners.score[i] =
+                    corner_correlation_score(img_sub, img_weight_sub, corners.v1[i], corners.v2[i]);
+            } else if (params.corner_type == MonkeySaddlePoint) {
+                corners.score[i] = corner_correlation_score(img_sub, img_weight_sub, corners.v1[i],
+                                                            corners.v2[i], corners.v3[i]);
+            }
+        }
+    });
 }
 
-void remove_low_scoring_corners(double tau, Corner &corners,
-                                const Params &params) {
-    std::vector<cv::Point2d> corners_out_p, corners_out_v1, corners_out_v2,
-        corners_out_v3;
+void remove_low_scoring_corners(double tau, Corner &corners, const Params &params) {
+    std::vector<cv::Point2d> corners_out_p, corners_out_v1, corners_out_v2, corners_out_v3;
     std::vector<double> corners_out_score;
     std::vector<int> corners_out_r;
     bool is_monkey_saddle = params.corner_type == MonkeySaddlePoint;

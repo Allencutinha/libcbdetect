@@ -46,13 +46,12 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-LIBCBDETECT_DLL_DECL void
-create_correlation_patch(std::vector<cv::Mat> &template_kernel, double angle_1,
-                         double angle_2, int radius);
+LIBCBDETECT_DLL_DECL void create_correlation_patch(std::vector<cv::Mat> &template_kernel,
+                                                   double angle_1, double angle_2, int radius);
 
-LIBCBDETECT_DLL_DECL void
-create_correlation_patch(std::vector<cv::Mat> &template_kernel, double angle_1,
-                         double angle_2, double angle_3, int radius);
+LIBCBDETECT_DLL_DECL void create_correlation_patch(std::vector<cv::Mat> &template_kernel,
+                                                   double angle_1, double angle_2, double angle_3,
+                                                   int radius);
 
 } // namespace cbdetect
 

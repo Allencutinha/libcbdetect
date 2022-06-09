@@ -46,16 +46,16 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 namespace cbdetect {
 
 // efficient mean-shift approximation by histogram smoothing
-std::vector<std::pair<int, double>>
-find_modes_meanshift(const std::vector<double> &hist, double sigma) {
+std::vector<std::pair<int, double>> find_modes_meanshift(const std::vector<double> &hist,
+                                                         double sigma) {
     std::unordered_map<int, double> hash_table;
     std::vector<std::pair<int, double>> modes;
 
     int r = static_cast<int>(std::round(2 * sigma));
     std::vector<double> weight(2 * r + 1, 0);
     for (int i = 0; i < 2 * r + 1; ++i) {
-        weight[i] = std::exp(-0.5 * (i - r) * (i - r) / sigma / sigma) /
-                    std::sqrt(2 * M_PI) / sigma;
+        weight[i] =
+            std::exp(-0.5 * (i - r) * (i - r) / sigma / sigma) / std::sqrt(2 * M_PI) / sigma;
     }
 
     // compute smoothed histogram
@@ -69,8 +69,7 @@ find_modes_meanshift(const std::vector<double> &hist, double sigma) {
 
     // check if at least one entry is non-zero
     // (otherwise mode finding may run infinitly)
-    auto max_hist_val =
-        std::max_element(hist_smoothed.begin(), hist_smoothed.end());
+    auto max_hist_val = std::max_element(hist_smoothed.begin(), hist_smoothed.end());
     if (*max_hist_val < 1e-6) {
         return modes;
     }
@@ -102,9 +101,7 @@ find_modes_meanshift(const std::vector<double> &hist, double sigma) {
         modes.emplace_back(i);
     }
     std::sort(modes.begin(), modes.end(),
-              [](const auto &i1, const auto &i2) -> bool {
-                  return i1.second > i2.second;
-              });
+              [](const auto &i1, const auto &i2) -> bool { return i1.second > i2.second; });
 
     return modes;
 };

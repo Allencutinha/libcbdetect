@@ -47,8 +47,7 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-LIBCBDETECT_DLL_DECL std::unordered_map<int, cv::Mat>
-weight_mask(const std::vector<int> &radius);
+LIBCBDETECT_DLL_DECL std::unordered_map<int, cv::Mat> weight_mask(const std::vector<int> &radius);
 
 }
 

@@ -44,8 +44,7 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-void box_filter(const cv::Mat &img, cv::Mat &blur_img, int kernel_size_x,
-                int kernel_size_y) {
+void box_filter(const cv::Mat &img, cv::Mat &blur_img, int kernel_size_x, int kernel_size_y) {
     if (kernel_size_y < 0) {
         kernel_size_y = kernel_size_x;
     }
@@ -94,9 +93,8 @@ void box_filter(const cv::Mat &img, cv::Mat &blur_img, int kernel_size_x,
     }
 }
 
-void image_normalization_and_gradients(cv::Mat &img, cv::Mat &img_du,
-                                       cv::Mat &img_dv, cv::Mat &img_angle,
-                                       cv::Mat &img_weight,
+void image_normalization_and_gradients(cv::Mat &img, cv::Mat &img_du, cv::Mat &img_dv,
+                                       cv::Mat &img_angle, cv::Mat &img_weight,
                                        const Params &params) {
     // normalize image
     if (params.norm) {
@@ -138,14 +136,12 @@ void image_normalization_and_gradients(cv::Mat &img, cv::Mat &img_du,
         cv::Mat tmp = img_weight.clone();
         std::swap(tmp, img_weight);
     }
-    cv::hal::fastAtan64f((const double *)img_dv.data,
-                         (const double *)img_du.data, (double *)img_angle.data,
-                         img.rows * img.cols, false);
+    cv::hal::fastAtan64f((const double *)img_dv.data, (const double *)img_du.data,
+                         (double *)img_angle.data, img.rows * img.cols, false);
     img_angle.forEach<double>([](double &pixel, const int *pos) -> void {
         pixel = pixel >= M_PI ? pixel - M_PI : pixel;
     });
-    img_weight.forEach<double>([&img_du, &img_dv](double &pixel,
-                                                  const int *pos) -> void {
+    img_weight.forEach<double>([&img_du, &img_dv](double &pixel, const int *pos) -> void {
         int u = pos[1];
         int v = pos[0];
         pixel = std::sqrt(img_du.at<double>(v, u) * img_du.at<double>(v, u) +

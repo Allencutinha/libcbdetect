@@ -41,8 +41,7 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-void plot_corners(const cv::Mat &img, const std::vector<cv::Point2d> &corners,
-                  const char *str) {
+void plot_corners(const cv::Mat &img, const std::vector<cv::Point2d> &corners, const char *str) {
     cv::Mat img_show;
     if (img.channels() != 3) {
 #if CV_VERSION_MAJOR >= 4
@@ -72,18 +71,18 @@ void plot_corners(const cv::Mat &img, const Corner &corners) {
         img_show = img.clone();
     }
     for (int i = 0; i < corners.p.size(); ++i) {
-        cv::line(img_show, corners.p[i], corners.p[i] + 20 * corners.v1[i],
-                 cv::Scalar(255, 0, 0), 2);
-        cv::line(img_show, corners.p[i], corners.p[i] + 20 * corners.v2[i],
-                 cv::Scalar(0, 255, 0), 2);
+        cv::line(img_show, corners.p[i], corners.p[i] + 20 * corners.v1[i], cv::Scalar(255, 0, 0),
+                 2);
+        cv::line(img_show, corners.p[i], corners.p[i] + 20 * corners.v2[i], cv::Scalar(0, 255, 0),
+                 2);
         if (!corners.v3.empty()) {
             cv::line(img_show, corners.p[i], corners.p[i] + 20 * corners.v3[i],
                      cv::Scalar(0, 0, 255), 2);
         }
         cv::circle(img_show, corners.p[i], 3, cv::Scalar(0, 0, 255), -1);
         cv::putText(img_show, std::to_string(i),
-                    cv::Point2i(corners.p[i].x - 12, corners.p[i].y - 6),
-                    cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 255), 1);
+                    cv::Point2i(corners.p[i].x - 12, corners.p[i].y - 6), cv::FONT_HERSHEY_SIMPLEX,
+                    0.5, cv::Scalar(0, 0, 255), 1);
     }
     cv::imshow("corners_img", img_show);
     // cv::imwrite("corners_img.png", img_show);

@@ -24,8 +24,8 @@
 
 namespace cbdetect {
 
-void plot_boards(const cv::Mat &img, const Corner &corners,
-                 const std::vector<Board> &boards, const Params &params) {
+void plot_boards(const cv::Mat &img, const Corner &corners, const std::vector<Board> &boards,
+                 const Params &params) {
     cv::Mat img_show;
     if (img.channels() != 3) {
 #if CV_VERSION_MAJOR >= 4
@@ -47,37 +47,31 @@ void plot_boards(const cv::Mat &img, const Corner &corners,
                 }
                 // plot lines in color
                 if (board.idx[i][j + 1] >= 0) {
-                    cv::line(img_show, corners.p[board.idx[i][j]],
-                             corners.p[board.idx[i][j + 1]],
+                    cv::line(img_show, corners.p[board.idx[i][j]], corners.p[board.idx[i][j + 1]],
                              cv::Scalar(0, 0, 255), 3, cv::LINE_AA);
                 }
-                if (params.corner_type == MonkeySaddlePoint &&
-                    board.idx[i + 1][j + 1] >= 0) {
+                if (params.corner_type == MonkeySaddlePoint && board.idx[i + 1][j + 1] >= 0) {
                     cv::line(img_show, corners.p[board.idx[i][j]],
-                             corners.p[board.idx[i + 1][j + 1]],
-                             cv::Scalar(0, 0, 255), 3, cv::LINE_AA);
+                             corners.p[board.idx[i + 1][j + 1]], cv::Scalar(0, 0, 255), 3,
+                             cv::LINE_AA);
                 }
                 if (board.idx[i + 1][j] >= 0) {
-                    cv::line(img_show, corners.p[board.idx[i][j]],
-                             corners.p[board.idx[i + 1][j]],
+                    cv::line(img_show, corners.p[board.idx[i][j]], corners.p[board.idx[i + 1][j]],
                              cv::Scalar(0, 0, 255), 3, cv::LINE_AA);
                 }
 
                 // plot lines in white
                 if (board.idx[i][j + 1] >= 0) {
-                    cv::line(img_show, corners.p[board.idx[i][j]],
-                             corners.p[board.idx[i][j + 1]],
+                    cv::line(img_show, corners.p[board.idx[i][j]], corners.p[board.idx[i][j + 1]],
                              cv::Scalar(255, 255, 255), 1, cv::LINE_AA);
                 }
-                if (params.corner_type == MonkeySaddlePoint &&
-                    board.idx[i + 1][j + 1] >= 0) {
+                if (params.corner_type == MonkeySaddlePoint && board.idx[i + 1][j + 1] >= 0) {
                     cv::line(img_show, corners.p[board.idx[i][j]],
-                             corners.p[board.idx[i + 1][j + 1]],
-                             cv::Scalar(255, 255, 255), 1, cv::LINE_AA);
+                             corners.p[board.idx[i + 1][j + 1]], cv::Scalar(255, 255, 255), 1,
+                             cv::LINE_AA);
                 }
                 if (board.idx[i + 1][j] >= 0) {
-                    cv::line(img_show, corners.p[board.idx[i][j]],
-                             corners.p[board.idx[i + 1][j]],
+                    cv::line(img_show, corners.p[board.idx[i][j]], corners.p[board.idx[i + 1][j]],
                              cv::Scalar(255, 255, 255), 1, cv::LINE_AA);
                 }
             }
@@ -91,12 +85,10 @@ void plot_boards(const cv::Mat &img, const Corner &corners,
                 board.idx[row][col + 1] < 0 || board.idx[row + 1][col] < 0) {
                 continue;
             }
-            cv::line(img_show, corners.p[board.idx[row][col]],
-                     corners.p[board.idx[row][col + 1]], cv::Scalar(255, 0, 0),
-                     3, cv::LINE_AA);
-            cv::line(img_show, corners.p[board.idx[row][col]],
-                     corners.p[board.idx[row + 1][col]], cv::Scalar(0, 255, 0),
-                     3, cv::LINE_AA);
+            cv::line(img_show, corners.p[board.idx[row][col]], corners.p[board.idx[row][col + 1]],
+                     cv::Scalar(255, 0, 0), 3, cv::LINE_AA);
+            cv::line(img_show, corners.p[board.idx[row][col]], corners.p[board.idx[row + 1][col]],
+                     cv::Scalar(0, 255, 0), 3, cv::LINE_AA);
             break;
         }
 
@@ -113,8 +105,8 @@ void plot_boards(const cv::Mat &img, const Corner &corners,
         mean /= (double)(board.num);
         mean.x -= 10;
         mean.y += 10;
-        cv::putText(img_show, std::to_string(n), mean, cv::FONT_HERSHEY_SIMPLEX,
-                    1.3, cv::Scalar(196, 196, 0), 2);
+        cv::putText(img_show, std::to_string(n), mean, cv::FONT_HERSHEY_SIMPLEX, 1.3,
+                    cv::Scalar(196, 196, 0), 2);
     }
 
     cv::imshow("boards_img", img_show);

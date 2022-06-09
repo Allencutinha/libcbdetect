@@ -44,8 +44,8 @@ Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 
 namespace cbdetect {
 
-LIBCBDETECT_DLL_DECL cv::Point3i
-board_energy(const Corner &corners, Board &board, const Params &params);
+LIBCBDETECT_DLL_DECL cv::Point3i board_energy(const Corner &corners, Board &board,
+                                              const Params &params);
 
 }
 

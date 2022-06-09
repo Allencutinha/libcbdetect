@@ -26,9 +26,8 @@
 namespace cbdetect {
 
 double find_minE(const Board &board, const cv::Point2i &p) {
-    double minE =
-        std::min(std::min(board.energy[p.y][p.x][0], board.energy[p.y][p.x][1]),
-                 board.energy[p.y][p.x][2]);
+    double minE = std::min(std::min(board.energy[p.y][p.x][0], board.energy[p.y][p.x][1]),
+                           board.energy[p.y][p.x][2]);
     if (p.x - 1 >= 0) {
         minE = std::min(minE, board.energy[p.y][p.x - 1][0]);
     }
@@ -51,8 +50,7 @@ double find_minE(const Board &board, const cv::Point2i &p) {
 }
 
 void filter_board(const Corner &corners, std::vector<int> &used, Board &board,
-                  std::vector<cv::Point2i> &proposal, double &energy,
-                  const Params &params) {
+                  std::vector<cv::Point2i> &proposal, double &energy, const Params &params) {
     // erase wrong corners
     while (!proposal.empty()) {
         cv::Point3i maxE_pos = board_energy(corners, board, params);
