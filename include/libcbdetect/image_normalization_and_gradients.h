@@ -10,13 +10,13 @@
 % terms of the GNU General Public License as published by the Free Software
 % Foundation; either version 3 of the License, or any later version.
 
-% This software is distributed in the hope that it will be useful, but WITHOUT ANY
-% WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
-% PARTICULAR PURPOSE. See the GNU General Public License for more details.
+% This software is distributed in the hope that it will be useful, but WITHOUT
+ANY % WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A % PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 % You should have received a copy of the GNU General Public License along with
-% this software; if not, write to the Free Software Foundation, Inc., 51 Franklin
-% Street, Fifth Floor, Boston, MA 02110-1301, USA
+% this software; if not, write to the Free Software Foundation, Inc., 51
+Franklin % Street, Fifth Floor, Boston, MA 02110-1301, USA
 */
 
 #pragma once
@@ -29,12 +29,14 @@
 
 namespace cbdetect {
 
-LIBCBDETECT_DLL_DECL void box_filter(const cv::Mat& img, cv::Mat& blur_img, int kernel_size_x, int kernel_size_y = -1);
+LIBCBDETECT_DLL_DECL void box_filter(const cv::Mat &img, cv::Mat &blur_img,
+                                     int kernel_size_x, int kernel_size_y = -1);
 
-LIBCBDETECT_DLL_DECL void image_normalization_and_gradients(cv::Mat& img, cv::Mat& img_du, cv::Mat& img_dv,
-                                                            cv::Mat& img_angle, cv::Mat& img_weight,
-                                                            const Params& params);
+LIBCBDETECT_DLL_DECL void
+image_normalization_and_gradients(cv::Mat &img, cv::Mat &img_du,
+                                  cv::Mat &img_dv, cv::Mat &img_angle,
+                                  cv::Mat &img_weight, const Params &params);
 
 } // namespace cbdetect
 
-#endif //LIBCBDETECT_BOX_FILTER_H
+#endif // LIBCBDETECT_BOX_FILTER_H
